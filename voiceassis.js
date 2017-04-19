@@ -194,13 +194,18 @@ function parseSongQuery(query) {
 			songName = queryArr.slice(1, i).join(" ");
 			artistName = queryArr.slice(i + 1, queryArr.length).join(" ");
 			break;
-		}
+		} 
 	}
-	//console.log(keyWord, songName, artistName);
+	if(artistName == "") {
+		songName = queryArr.slice(1,queryArr.length).join(" ");
+	}
+
 	getSongSearchResults(songName, artistName);
+	
 }
 
 function getSongSearchResults(song, artist) {
+	console.log(song, artist);
 	$.ajax({
 		url: "get_song_search.php",
 		data: { song : song,
@@ -223,10 +228,30 @@ function playSong(res) {
 	var playing = false;
 	if(res.length > 0) {
 		res = res[0];
+
+		$("#results_heading").attr('id', 'songs_heading');
+		$(".result_heading").html("Now Playing - " + res.name + " by " + res.artists[0].name);
+		$("#results").attr('id', 'songs_results');
+		var songsTable = '<table class="table" id="song_table">';
+		songsTable += '<tbody>';
+
+		// Start row for headings 
+		songsTable += '<tr>';
+		// Generate headings 
+		songsTable += generateSongHeadingHTML();
+		// End row for headings
+		songsTable += '</tr>';
+		songsTable += generateSongRowsHTML(res.external_urls.spotify, "Youtube link");
+
+		// End tbody and table
+		songsTable += '</tbody>';
+		songsTable += '</table>';
+		$("#songs_results").append(songsTable);
+		// Change the class, put in another one as you have to change the css for this
+		$("#song_table").addClass("soccer_table");
+		console.log(songsTable);
 		var audio = new Audio();
 		var play_artist = res.artists[0].name;
-		//var play_song = res.album[0].name;
-		//audio.attr("id","play_song");
 		audio.src = res.preview_url;
 		audio.play();
 		playing = true;
@@ -417,6 +442,24 @@ function generateFixturesHeadingsHTML() {
 	html += '<td class="soccer_row_heading" id="away_team">Away Team</td>';
 	html += '<td class="soccer_row_heading" id="date_played">Date</td>';
 	html += '<td class="soccer_row_heading" id="status">Status</td>';
+	return html;
+}
+
+function generateSongHeadingHTML() {
+	var html = '<td class="song_heading">Links for the Song</td>';
+	return html;
+}
+
+function generateSongRowsHTML(spot_link, youtube_link) {
+	console.log(spot_link);
+	var html = '<tr>';
+	html += '<td class="song_row">Spotify Link</td>';
+	html += '<td class="song_row">' + spot_link + '</td>';
+	html += '</tr>';
+	html += '<tr>';
+	html += '<td class="song_row">Youtube Link</td>';
+	html += '<td class="song_row">' + "Youtube link to be added" + '</td>';
+	html += '</tr>';
 	return html;
 }
 
