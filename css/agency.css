@@ -23,8 +23,15 @@ body {
 /* Weather table CSS */
 .weather_table {
   table-layout: fixed;
-  width: 66%;
-  max-width: 66%;
+  width: 92%;
+  max-width: 92%;
+  margin: 0px auto;
+}
+
+.song_table {
+  table-layout: fixed;
+  width: 75%;
+  max-width: 75%;
   margin: 0px auto;
 }
 
@@ -36,6 +43,10 @@ body {
 
 
 .soccer_row_value {
+  font-size: 16px;
+}
+
+.song_row {
   font-size: 16px;
 }
 
@@ -58,7 +69,7 @@ body {
   font-size: 25px;
 }
 
-.soccer_row_value, .soccer_row_heading {
+.soccer_row_value, .soccer_row_heading, .song_row {
   font-size: 16px !important;
 }
 
