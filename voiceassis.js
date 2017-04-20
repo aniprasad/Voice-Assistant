@@ -1,3 +1,4 @@
+var audio = document.createElement("audio");
 
 // Set the option based on the key word as given by the input
 function setOption(word) {
@@ -233,14 +234,10 @@ function playSong(res) {
 		$(".result_heading").html("Now Playing - " + res.name + " by " + res.artists[0].name);
 		$("#results").attr('id', 'songs_results');
 		var songsTable = '<table class="table" id="song_table">';
+
+		// songsTable += '<caption>Links for the whole song</caption>';
 		songsTable += '<tbody>';
 
-		// Start row for headings 
-		songsTable += '<tr>';
-		// Generate headings 
-		songsTable += generateSongHeadingHTML();
-		// End row for headings
-		songsTable += '</tr>';
 		songsTable += generateSongRowsHTML(res.external_urls.spotify, "Youtube link");
 
 		// End tbody and table
@@ -248,20 +245,28 @@ function playSong(res) {
 		songsTable += '</table>';
 		$("#songs_results").append(songsTable);
 		// Change the class, put in another one as you have to change the css for this
-		$("#song_table").addClass("soccer_table");
+		$("#song_table").addClass("song_table");
 		console.log(songsTable);
-		var audio = new Audio();
+		//var audio = new Audio();
+		//console.log(document.getElementById("current_song"));
+		var x = document.getElementById("current_song");
+		console.log(x);
+		//var audio = document.createElement('audio');
+		audio.id = "current_song";
 		var play_artist = res.artists[0].name;
 		audio.src = res.preview_url;
+		//audio.ontimeupdate = testFunc();
 		audio.play();
 		playing = true;
-		console.log(audio);
 	}
 	else {
 		// No songs to play
 		console.log("No Song to Play");
 		// Pull up a youtube search maybe?
 	}
+}
+function testFunc() {
+	console.log("Pos change");
 }
 
 function getStandings(league) {
@@ -444,17 +449,17 @@ function generateFixturesHeadingsHTML() {
 	html += '<td class="soccer_row_heading" id="status">Status</td>';
 	return html;
 }
-
+/*
 function generateSongHeadingHTML() {
 	var html = '<td class="song_heading">Links for the Song</td>';
 	return html;
-}
+}*/
 
 function generateSongRowsHTML(spot_link, youtube_link) {
 	console.log(spot_link);
 	var html = '<tr>';
 	html += '<td class="song_row">Spotify Link</td>';
-	html += '<td class="song_row">' + spot_link + '</td>';
+	html += '<td class="song_row"><a href="' + spot_link + '">Click to hear the song on Spotify</a></td>';
 	html += '</tr>';
 	html += '<tr>';
 	html += '<td class="song_row">Youtube Link</td>';
@@ -494,6 +499,16 @@ function clearHTML() {
 		$(".weather_heading").removeClass("weather_heading");
 		$("#weather_heading").attr("id", "results_heading");
 	}
+	if($("#songs_heading").attr("id") == "songs_heading") {
+		console.log("Cleared Songs");
+		$("#song_table").remove();
+		$(".result_heading").html("");
+		$("#songs_heading").attr("id", "results_heading");
+		// audio.src = "";
+	}
+	if($("#songs_results").attr("id") == "songs_results") {
+		$("#songs_results").attr("id", "results");
+	}
 	if($("#soccer_heading").attr("id") == "soccer_heading") {
 		$("#soccer_table").remove();
 		$("#soccer_heading").attr("id","results_heading");
@@ -528,4 +543,20 @@ function availableCommands() {
 		4.3 Build Playlist of Songs: TBI
 		4.4 Pause Song: TBI
 	*/
+}
+
+function shortenUrl(longURL){
+
+  $.ajax({
+        url: 'https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS&key=AIzaSyANFw1rVq_vnIzT4vVOwIw3fF1qHXV7Mjw',
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: '{ longUrl: "' + longURL +'"}',
+        dataType: 'json',
+        success: function(response) {
+            var result = JSON.parse(response); // Evaluate the J-Son response object.
+        	console.log(response);
+        }
+     });
+  
 }

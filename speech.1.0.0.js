@@ -388,6 +388,8 @@ var Bing;
         };
         Speech.prototype.stop = function () {
             if (this._currentSource) {
+                this.context.close();
+                // console.log(this);
                 Platform.getCU().done(function (cu) {
                     cu.disconnect();
                 });
