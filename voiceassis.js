@@ -128,6 +128,7 @@ function getWeatherInformation(query) {
 $("#record_button").click(function() {
 	clearHTML();
 })
+
 /* Soccer Stuff starts here */
 function parseFootballQuery(query) {
 	var queryArr = [];
@@ -222,85 +223,6 @@ function getLiveScores() {
 	});	
 }
 
-function parseSongQuery(query) {
-	var queryArr=[];
-	queryArr = query.split(" ");
-	var keyWord = queryArr[0]; // queryArr[0] = "play"
-	var songName = "";
-	var artistName = "";
-	//var artistIndex = 0;
-	for(var i = 0 ; i < queryArr.length ; i++) {
-		if(queryArr[i].toLowerCase() == "by") {
-			songName = queryArr.slice(1, i).join(" ");
-			artistName = queryArr.slice(i + 1, queryArr.length).join(" ");
-			break;
-		} 
-	}
-	if(artistName == "") {
-		songName = queryArr.slice(1,queryArr.length).join(" ");
-	}
-
-	getSongSearchResults(songName, artistName);
-	
-}
-
-function getSongSearchResults(song, artist) {
-	console.log(song, artist);
-	$.ajax({
-		url: "get_song_search.php",
-		data: { song : song,
-				artist: artist},
-		type: "POST",
-		dataType: "json",
-		success: function(result) {
-			console.log("Result:", result);
-			playSong(result);
-		},
-		failure: function(result) {
-			console.log("Failure: ", result);
-		}
-	});
-}
-
-function playSong(res) {
-	res = res.tracks.items;
-	console.log("Play song function ", res);
-	var playing = false;
-	if(res.length > 0) {
-		res = res[0];
-
-		$("#results_heading").attr('id', 'songs_heading');
-		$(".result_heading").html("Now Playing - " + res.name + " by " + res.artists[0].name);
-		$("#results").attr('id', 'songs_results');
-		var songsTable = '<table class="table" id="song_table">';
-
-		// songsTable += '<caption>Links for the whole song</caption>';
-		songsTable += '<tbody>';
-
-		songsTable += generateSongRowsHTML(res.external_urls.spotify, "Youtube link");
-
-		// End tbody and table
-		songsTable += '</tbody>';
-		songsTable += '</table>';
-		$("#songs_results").append(songsTable);
-		// Change the class, put in another one as you have to change the css for this
-		$("#song_table").addClass("song_table");
-		console.log(songsTable);
-		audio.id = "current_song";
-		var play_artist = res.artists[0].name;
-		audio.src = res.preview_url;
-		audio.play();
-		playing = true;
-	}
-	else {
-		// No songs to play
-		console.log("No Song to Play");
-		// Pull up a youtube search maybe?
-	}
-}
-function testFunc() {
-	console.log("Pos change");
-}
 
 function getStandings(league) {
 	var league = league.toUpperCase();
@@ -315,9 +237,6 @@ function getStandings(league) {
 
 			$("#results_heading").attr('id', 'soccer_heading');
 			
-//			$(".result_heading").removeClass("weather_heading");
-//			$(".result_heading").addClass("result_heading");
-			//$(".result_heading")
 			$(".result_heading").html("League Table");
 
 			$("#results").attr('id', 'soccer_results');
@@ -353,6 +272,7 @@ function getStandings(league) {
 		}
 	});
 }
+
 
 function getTeamInformation(team, filter) {
 	//http://api.football-data.org/v1/teams/5/fixtures?timeFrame=n20
@@ -429,7 +349,81 @@ function getTeamFixtures(id, l_id, t_code, t_name, filter) {
 	});
 }
 
+/* Song Stuff starts here */
+function parseSongQuery(query) {
+	var queryArr=[];
+	queryArr = query.split(" ");
+	var keyWord = queryArr[0]; // queryArr[0] = "play"
+	var songName = "";
+	var artistName = "";
+	//var artistIndex = 0;
+	for(var i = 0 ; i < queryArr.length ; i++) {
+		if(queryArr[i].toLowerCase() == "by") {
+			songName = queryArr.slice(1, i).join(" ");
+			artistName = queryArr.slice(i + 1, queryArr.length).join(" ");
+			break;
+		} 
+	}
+	if(artistName == "") {
+		songName = queryArr.slice(1,queryArr.length).join(" ");
+	}
 
+	getSongSearchResults(songName, artistName);
+	
+}
+
+function getSongSearchResults(song, artist) {
+	console.log(song, artist);
+	$.ajax({
+		url: "get_song_search.php",
+		data: { song : song,
+				artist: artist},
+		type: "POST",
+		dataType: "json",
+		success: function(result) {
+			console.log("Result:", result);
+			playSong(result);
+		},
+		failure: function(result) {
+			console.log("Failure: ", result);
+		}
+	});
+}
+
+function playSong(res) {
+	res = res.tracks.items;
+	console.log("Play song function ", res);
+	var playing = false;
+	if(res.length > 0) {
+		res = res[0];
+
+		$("#results_heading").attr('id', 'songs_heading');
+		$(".result_heading").html("Now Playing - " + res.name + " by " + res.artists[0].name);
+		$("#results").attr('id', 'songs_results');
+		var songsTable = '<table class="table" id="song_table">';
+
+		songsTable += '<tbody>';
+
+		songsTable += generateSongRowsHTML(res.external_urls.spotify, "Youtube link");
+
+		// End tbody and table
+		songsTable += '</tbody>';
+		songsTable += '</table>';
+		$("#songs_results").append(songsTable);
+		$("#song_table").addClass("song_table");
+		console.log(songsTable);
+		audio.id = "current_song";
+		var play_artist = res.artists[0].name;
+		audio.src = res.preview_url;
+		audio.play();
+		playing = true;
+	}
+	else {
+		// No songs to play
+		console.log("No Song to Play");
+		// Pull up a youtube search maybe?
+	}
+}
 
 function returnWeatherRowStructure(id, heading, value, unit)
 {
