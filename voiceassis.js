@@ -178,9 +178,48 @@ function parseFootballQuery(query) {
 			getTeamInformation(teamName, -1);			
 		}
 	}
+	else if(identifier.includes("score")) {
+		console.log(identifier);
+		var live = 0;
+		for(var i = 2 ; i < queryArr.length ; i++) {
+			if(queryArr[i].toLowerCase() == "live") {
+				live = 1;
+				break;
+			}
+		}
+		if(live) {
+			getLiveScores();
+		}
+		else {
+			console.log("Couldn't get live scores. Please try the command again");
+		}
+	}
 	else {
 		console.log("TBI!");
 	}
+}
+
+function getLiveScores() {
+	$.ajax({
+		url: "get_live_scores.php",
+		dataType: "json",
+		success: function(result) {
+			console.log("Result:", result);
+			console.log(result.games.length);
+			if(result.games.length <= 0) {
+				/* No games playing right now in the major leagues */
+				$("#results_heading").attr('id', 'soccer_heading');
+				$(".result_heading").html("There is no game being played right now in any of Europe's major leagues");
+			}
+			else {
+				/* Do nothing for now. See how the response is when live games are played */
+				;
+			}
+		},
+		failure: function(result) {
+			console.log("Failure: ", result);
+		}
+	});	
 }
 
 function parseSongQuery(query) {
@@ -247,15 +286,9 @@ function playSong(res) {
 		// Change the class, put in another one as you have to change the css for this
 		$("#song_table").addClass("song_table");
 		console.log(songsTable);
-		//var audio = new Audio();
-		//console.log(document.getElementById("current_song"));
-		var x = document.getElementById("current_song");
-		console.log(x);
-		//var audio = document.createElement('audio');
 		audio.id = "current_song";
 		var play_artist = res.artists[0].name;
 		audio.src = res.preview_url;
-		//audio.ontimeupdate = testFunc();
 		audio.play();
 		playing = true;
 	}
@@ -456,15 +489,14 @@ function generateSongHeadingHTML() {
 }*/
 
 function generateSongRowsHTML(spot_link, youtube_link) {
-	console.log(spot_link);
 	var html = '<tr>';
 	html += '<td class="song_row">Spotify Link</td>';
 	html += '<td class="song_row"><a href="' + spot_link + '">Click to hear the song on Spotify</a></td>';
 	html += '</tr>';
-	html += '<tr>';
+	/*html += '<tr>';
 	html += '<td class="song_row">Youtube Link</td>';
 	html += '<td class="song_row">' + "Youtube link to be added" + '</td>';
-	html += '</tr>';
+	html += '</tr>';*/
 	return html;
 }
 
@@ -533,15 +565,14 @@ function availableCommands() {
 		2.1 Soccer table for league: Soccer table/standings <League Code>
 			2.1.1 List of available leagues: league_ids.php
 		2.2 Soccer Fixtures : Soccer Fixtures <Team name>
-		2.3 Soccer Fixtures Upcoming/Previous : occer fixtures next/previous <num of days to go back or forward> <teamname>
-		2.4 Live Soccer Scores : TBI
+		2.3 Soccer Fixtures Upcoming/Previous : soccer fixtures next/previous <num of days to go back or forward> <teamname>
+		2.4 Live Soccer Scores : soccer scores live
 	3. Information
 		3.1 Bring up wikipedia articles based on search : TBI
 	4. Play Songs
 		4.1 Play song: play <Song name>
 		4.2 Play song with artist: play <Song name> by <Artist>
 		4.3 Build Playlist of Songs: TBI
-		4.4 Pause Song: TBI
 	*/
 }
 

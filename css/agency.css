@@ -63,6 +63,7 @@ body {
   color: #fff;
   font-size: 16px;
   border-top: none;
+  font-family: Quicksand;
 }
 
 .table>tbody>tr>td {
@@ -70,7 +71,7 @@ body {
 }
 
 .soccer_row_value, .soccer_row_heading, .song_row {
-  font-size: 16px !important;
+  font-size: 20px !important;
 }
 
 /* Weather table CSS */
