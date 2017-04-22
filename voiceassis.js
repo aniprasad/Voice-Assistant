@@ -569,19 +569,3 @@ function availableCommands() {
 		4.3 Build Playlist of Songs: TBI
 	*/
 }
-
-function shortenUrl(longURL){
-
-  $.ajax({
-        url: 'https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS&key=AIzaSyANFw1rVq_vnIzT4vVOwIw3fF1qHXV7Mjw',
-        type: 'POST',
-        contentType: 'application/json; charset=utf-8',
-        data: '{ longUrl: "' + longURL +'"}',
-        dataType: 'json',
-        success: function(response) {
-            var result = JSON.parse(response); // Evaluate the J-Son response object.
-        	console.log(response);
-        }
-     });
-  
-}
