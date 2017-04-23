@@ -214,7 +214,40 @@ function getLiveScores() {
 			}
 			else {
 				/* Do nothing for now. See how the response is when live games are played */
-				;
+				console.log(result);
+				$("#results_heading").attr('id', 'soccer_heading');
+				$(".result_heading").html("Live Soccer Scores");
+				$("#results").attr('id', 'soccer_results');
+				var soccerTable = '<table class="table" id="soccer_table">';
+				soccerTable += '<tbody>';
+
+				// Start row for headings 
+				soccerTable += '<tr>';
+				// Generate headings 
+				soccerTable += generateLiveScoresHeadingsHTML();
+				// End row for headings
+				soccerTable += '</tr>';
+
+				// Generate data by looping through various teams
+				for(var i = 0 ; i < result.games.length ; i++) {
+					if(result.games[i].time.substr("-1") == "'") {
+						soccerTable += generateLiveScoresRowsHTML(result.games[i], i, 1);
+					}
+					else {
+						soccerTable += generateLiveScoresRowsHTML(result.games[i], i, 0);						
+					}
+				}
+
+				// End tbody and table
+				soccerTable += '</tbody>';
+				soccerTable += '</table>';
+
+				$("#soccer_results").append(soccerTable);
+				// Change the class, put in another one as you have to change the css for this
+				$("#soccer_table").addClass("soccer_table");
+				$("#soccer_table").removeClass("weather_table");
+
+				console.log(soccerTable);
 			}
 		},
 		failure: function(result) {
@@ -461,6 +494,48 @@ function generateFootballStandingsRows(res) {
 	html += '<td class="soccer_row_value" id="soc_ga">'+res.goalsAgainst+'</td>';
 	html += '<td class="soccer_row_value" id="soc_gd">'+res.goalDifference+'</td>';
 	html += '<td class="soccer_row_value" id="soc_pts">'+res.points+'</td>';
+	html += '</tr>';
+	return html;
+}
+
+function generateLiveScoresHeadingsHTML() {
+	var html = '<td class="soccer_row_heading" id="ser_no">#</td>';
+	html += '<td class="soccer_row_heading" id="league_name">League</td>';
+	html += '<td class="soccer_row_heading" id="home_team">Home Team</td>';
+	html += '<td class="soccer_row_heading" id="score">Score</td>';
+	html += '<td class="soccer_row_heading" id="away_team">Away Team</td>';
+	// html += '<td class="soccer_row_heading" id="date_played">Date</td>';
+	html += '<td class="soccer_row_heading" id="status">Status</td>';
+	return html;
+}
+function generateLiveScoresRowsHTML(res, num_game, live_flag) {
+	// Status 
+	// 1. Finished
+	// 2. Live
+	// 3. To be Played
+	var score = "";
+	var status = "";
+	if(live_flag == 1) {
+		// Live game going on
+		status = '<img src="http://cdn3.livescore.com/web2/img/flash.gif"></img> ' + res.time;
+	}
+	else {
+		status = res.time;
+	}
+	if(res.goalsAwayTeam != -1 && res.goalsHomeTeam != -1) {
+		score = res.goalsHomeTeam + " - " + res.goalsAwayTeam;
+	}
+	else {
+		score = "TBA - TBA";
+	}
+
+	var html = '<tr>';
+	html += '<td class="soccer_row_value" id="ser_no">'+(parseInt(num_game) + 1)+'</td>';
+	html += '<td class="soccer_row_value" id="league_name">'+res.league+'</td>';
+	html += '<td class="soccer_row_value" id="home_team">'+res.homeTeamName+'</td>';
+	html += '<td class="soccer_row_value" id="score">'+score+'</td>';
+	html += '<td class="soccer_row_value" id="away_team">'+res.awayTeamName+'</td>';
+	html += '<td class="soccer_row_value" id="status">' + status + '</td>';
 	html += '</tr>';
 	return html;
 }
