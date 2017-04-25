@@ -1,7 +1,7 @@
 var audio = document.createElement("audio");
 var map;
 var infowindow;
-var location_type = -1;
+var locationType = -1;
 
 // Set the option based on the key word as given by the input
 function setOption(word) {
@@ -19,7 +19,7 @@ function setOption(word) {
 	else if(word.includes("play")) {
 		opt = "P";
 	}
-	else if(word.includes("near my") || word.includes("location") || word.includes("near me")) {
+	else if(word.includes("show me") || word.includes("location") || word.includes("near me")) {
 		opt = "L";
 	}
 	else {
@@ -664,9 +664,12 @@ function availableCommands() {
         //var pyrmont = {lat: -33.867, lng: 151.195};
         var myLocation = {lat: pos.lat, lng: pos.lng};
 
+        if(document.getElementById("map-area") != null) {
+        	// Element already exists remove it
+        	$("#map-area").remove();
+        }
         var mapDiv = $("<div id='map-area'></div>");
         $("#about").append(mapDiv);
-
         // Add CSS classes to the section and mapDiv
         $("#about").addClass("map-section");
         $("#map-area").addClass("map-area");
@@ -681,7 +684,7 @@ function availableCommands() {
         service.nearbySearch({
           location: myLocation,
           radius: 500,
-          type: [location_type]
+          type: [locationType]
         }, callback);
       }
 
@@ -748,28 +751,84 @@ function parseLocationQuery(query) {
 	var queryArr=[];
 	queryArr = query.split(" ");
 	var type = "";
+	var address = "";
+	var i = 0;
 	// Iterate through to figure out the "type" to search
-	for(var i = 0 ; i < queryArr.length ; i++) {
+	for( ; i < queryArr.length ; i++) {
 		if(queryArr[i].toLowerCase().includes("restaurants") 
 			|| queryArr[i].toLowerCase().includes("places to eat")
 			|| queryArr[i].toLowerCase().includes("food places")) {
 			type = "restaurant";
+		    console.log(type);
+			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("hospital")
 			|| queryArr[i].toLowerCase().includes("clinic")) {
 			type = "hospital";
+			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("subway")) {
 			type = "subway_station";
+			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("theater")
 			|| queryArr[i].toLowerCase().includes("cinema")) {
 			type = "movie_theater";
+			break;
 		}
+		else if(queryArr[i].toLowerCase().includes("store")) {
+			type = "store";
+			break;
+		}
+		/*
+		else if(queryArr[i].toLowerCase().includes("me")) {
+			type = queryArr[i+1];
+			// debugger;
+			break;
+		}*/
 	}
-	location_type = type;
+	console.log(type);
+	locationType = type;
+	console.log(locationType);
+	if(queryArr[queryArr.length - 1].toLowerCase().includes("location")
+	|| queryArr[queryArr.length - 1].toLowerCase().includes("me")) {
+        console.log(document.getElementById("map-area"));
+		console.log((document.getElementById("map-area") == null));	
+		geoLocation();	
+	}
+	else {
+		for( ; i < queryArr.length - 1;  i++) {
+			if(queryArr[i].toLowerCase().includes("near")) {
+				address = queryArr.slice(i+1, queryArr.length).join(" ");
+				break;
+			}
+		}
+		convertAddressToLatLong(address, locationType);
+	}
+
 	// Once the type has been figured out, call geoLocation()
 	// which then calls initMap();
 
-	geoLocation();
+}
+
+
+function convertAddressToLatLong(addr, type) {
+	
+	$.ajax({
+		url: "get_lat_long.php",
+		data: { address : addr },
+		type: "POST",
+		dataType: "json",
+		success: function(result) {
+			console.log(addr);
+			console.log("Result:", result);
+			result = result.results[0];
+			var pos = {lat: result.geometry.location.lat, lng: result.geometry.location.lng};
+			// console.log(addr, locationType);
+			initMap(pos);
+		},
+		failure: function(result) {
+			console.log("Failure: ", result);
+		}
+	});	
 }
