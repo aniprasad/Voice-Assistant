@@ -1,4 +1,7 @@
 var audio = document.createElement("audio");
+var map;
+var infowindow;
+var location_type = -1;
 
 // Set the option based on the key word as given by the input
 function setOption(word) {
@@ -15,6 +18,9 @@ function setOption(word) {
 	}
 	else if(word.includes("play")) {
 		opt = "P";
+	}
+	else if(word.includes("near my") || word.includes("location") || word.includes("near me")) {
+		opt = "L";
 	}
 	else {
 		opt = "N";
@@ -643,4 +649,127 @@ function availableCommands() {
 		4.2 Play song with artist: play <Song name> by <Artist>
 		4.3 Build Playlist of Songs: TBI
 	*/
+}
+
+// Google maps stuff
+
+
+
+     // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      function initMap(pos) {
+
+        //var pyrmont = {lat: -33.867, lng: 151.195};
+        var myLocation = {lat: pos.lat, lng: pos.lng};
+
+        var mapDiv = $("<div id='map-area'></div>");
+        $("#about").append(mapDiv);
+
+        // Add CSS classes to the section and mapDiv
+        $("#about").addClass("map-section");
+        $("#map-area").addClass("map-area");
+        //var html = "<section></section>"
+        map = new google.maps.Map(document.getElementById('map-area'), {
+          center: myLocation,
+          zoom: 15
+        });
+
+        infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: myLocation,
+          radius: 500,
+          type: [location_type]
+        }, callback);
+      }
+
+      function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+          }
+        }
+      }
+
+      function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+
+//Trying geolocation
+function geoLocation() {
+	if("geolocation" in navigator) {
+		//Avaliable
+		navigator.geolocation.getCurrentPosition(success, error, options);
+		//console.log(pos);
+	}
+	else {
+		// GeoLocation not available
+		console.log("Location not available");
+	}
+}
+
+function error() {
+	console.log("Location doesn't work");
+}
+var options = {
+  enableHighAccuracy: true, 
+  maximumAge        : 30000, 
+  timeout           : 5000
+};
+
+function success(pos) {
+  var crd = pos.coords;
+  console.log('Your current position is:');
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  console.log(`More or less ${crd.accuracy} meters.`);
+  // return pos;
+  var position = {lat: crd.latitude, lng: crd.longitude, accuracy: crd.accuracy};
+  console.log(position);
+  initMap(position);
+};
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+};
+
+function parseLocationQuery(query) {
+	var queryArr=[];
+	queryArr = query.split(" ");
+	var type = "";
+	// Iterate through to figure out the "type" to search
+	for(var i = 0 ; i < queryArr.length ; i++) {
+		if(queryArr[i].toLowerCase().includes("restaurants") 
+			|| queryArr[i].toLowerCase().includes("places to eat")
+			|| queryArr[i].toLowerCase().includes("food places")) {
+			type = "restaurant";
+		}
+		else if(queryArr[i].toLowerCase().includes("hospital")
+			|| queryArr[i].toLowerCase().includes("clinic")) {
+			type = "hospital";
+		}
+		else if(queryArr[i].toLowerCase().includes("subway")) {
+			type = "subway_station";
+		}
+		else if(queryArr[i].toLowerCase().includes("theater")
+			|| queryArr[i].toLowerCase().includes("cinema")) {
+			type = "movie_theater";
+		}
+	}
+	location_type = type;
+	// Once the type has been figured out, call geoLocation()
+	// which then calls initMap();
+
+	geoLocation();
 }
