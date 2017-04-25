@@ -289,6 +289,22 @@ fieldset[disabled] .btn-xl.active {
 #about {
     background: #3A4557;
 }
+
+.map-section {
+  height: 800px;
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 750px;
+}
+
+#map-area {
+  position: relative;
+  height: 80%;
+  width: 80%;
+  margin: auto;  
+}
+
 @media (min-width: 768px) {
   .navbar-custom {
     background-color: transparent;

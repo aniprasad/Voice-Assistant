@@ -294,6 +294,12 @@
                         var songQuery = sanitizeQuery(response_text);
                         parseSongQuery(songQuery);
                         break;
+                    case "L":
+                        // Command: Show me restaurants near my location
+                        console.log("location settings");
+                        var locationQuery = sanitizeQuery(response_text);
+                        parseLocationQuery(locationQuery);
+                        break;
                     default:
                         console.log("Invalid option");
                         //initMap();
