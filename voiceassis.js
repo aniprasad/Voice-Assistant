@@ -1,7 +1,7 @@
 var audio = document.createElement("audio");
-var map;
-var infowindow;
-var locationType = -1;
+var map, infowindow;
+var locationType = "", locationHeading = "";
+var position = {};
 
 // Set the option based on the key word as given by the input
 function setOption(word) {
@@ -606,6 +606,13 @@ function clearHTML() {
 		$(".weather_heading").removeClass("weather_heading");
 		$("#weather_heading").attr("id", "results_heading");
 	}
+	if($("#location_heading").attr("id") == "location_heading") {
+		console.log("Cleared Location");
+		$(".result_heading").html("");
+		$("#location_heading").attr("id", "results_heading");
+		$("#map-area").remove();
+		$("#about").removeClass("map-section");
+	}
 	if($("#songs_heading").attr("id") == "songs_heading") {
 		console.log("Cleared Songs");
 		$("#song_table").remove();
@@ -659,65 +666,67 @@ function availableCommands() {
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-      function initMap(pos) {
+function initMap(pos) {
+    
+	//var default = {lat: -33.867, lng: 151.195};
+	var myLocation = {lat: pos.lat, lng: pos.lng};
 
-        //var pyrmont = {lat: -33.867, lng: 151.195};
-        var myLocation = {lat: pos.lat, lng: pos.lng};
+	if(document.getElementById("map-area") != null) {
+		// Element already exists remove it and recreate it
+		$("#map-area").remove();
+		$("#about").removeClass("map-section");
+	}
+	var mapDiv = $("<div id='map-area'></div>");
+	$("#about").append(mapDiv);
+	// Add CSS classes to the section and mapDiv
+	$("#about").addClass("map-section");
+	$("#map-area").addClass("map-area");
+	// Add Heading
+	$("#results_heading").attr('id', 'location_heading');
+	$(".result_heading").html(locationHeading);
+	map = new google.maps.Map(document.getElementById('map-area'), {
+	  center: myLocation,
+	  zoom: 12
+	});
 
-        if(document.getElementById("map-area") != null) {
-        	// Element already exists remove it
-        	$("#map-area").remove();
-        }
-        var mapDiv = $("<div id='map-area'></div>");
-        $("#about").append(mapDiv);
-        // Add CSS classes to the section and mapDiv
-        $("#about").addClass("map-section");
-        $("#map-area").addClass("map-area");
-        //var html = "<section></section>"
-        map = new google.maps.Map(document.getElementById('map-area'), {
-          center: myLocation,
-          zoom: 15
-        });
+	infowindow = new google.maps.InfoWindow();
+	var service = new google.maps.places.PlacesService(map);
+	service.nearbySearch({
+	  location: myLocation,
+	  radius: 5000,
+	  type: [locationType]
+	}, callback);
+}
 
-        infowindow = new google.maps.InfoWindow();
-        var service = new google.maps.places.PlacesService(map);
-        service.nearbySearch({
-          location: myLocation,
-          radius: 500,
-          type: [locationType]
-        }, callback);
-      }
+	function callback(results, status) {
+		if (status === google.maps.places.PlacesServiceStatus.OK) {
+		  for (var i = 0; i < results.length; i++) {
+		    createMarker(results[i]);
+		  }
+		}
+	}
 
-      function callback(results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-          }
-        }
-      }
+	function createMarker(place) {
+		var placeLoc = place.geometry.location;
+		var marker = new google.maps.Marker({
+		  map: map,
+		  position: place.geometry.location
+		});
 
-      function createMarker(place) {
-        var placeLoc = place.geometry.location;
-        var marker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location
-        });
+		google.maps.event.addListener(marker, 'click', function() {
+		  infowindow.setContent(place.name);
+		  infowindow.open(map, this);
+		});
+	}
 
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.setContent(place.name);
-          infowindow.open(map, this);
-        });
-      }
-
-//Trying geolocation
+// GeoLocation Services
 function geoLocation() {
 	if("geolocation" in navigator) {
-		//Avaliable
+		// Geolocation Avaliable
 		navigator.geolocation.getCurrentPosition(success, error, options);
-		//console.log(pos);
 	}
 	else {
-		// GeoLocation not available
+		// Geolocation not available
 		console.log("Location not available");
 	}
 }
@@ -738,8 +747,10 @@ function success(pos) {
   console.log(`Longitude: ${crd.longitude}`);
   console.log(`More or less ${crd.accuracy} meters.`);
   // return pos;
-  var position = {lat: crd.latitude, lng: crd.longitude, accuracy: crd.accuracy};
+  position = {lat: crd.latitude, lng: crd.longitude, accuracy: crd.accuracy};
   console.log(position);
+
+  // Call initMap here as geoLocation is done asynchronously
   initMap(position);
 };
 
@@ -750,34 +761,37 @@ function error(err) {
 function parseLocationQuery(query) {
 	var queryArr=[];
 	queryArr = query.split(" ");
-	var type = "";
-	var address = "";
-	var i = 0;
+	var type = "", address = "", typeSanitized = "";
+	var i = 0, locationFlag = 0;
 	// Iterate through to figure out the "type" to search
 	for( ; i < queryArr.length ; i++) {
 		if(queryArr[i].toLowerCase().includes("restaurants") 
 			|| queryArr[i].toLowerCase().includes("places to eat")
 			|| queryArr[i].toLowerCase().includes("food places")) {
 			type = "restaurant";
-		    console.log(type);
+			typeSanitized = "Restaurants";
 			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("hospital")
 			|| queryArr[i].toLowerCase().includes("clinic")) {
 			type = "hospital";
+			typeSanitized = "Hospitals";
 			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("subway")) {
 			type = "subway_station";
+			typeSanitized = "Subway Stations";
 			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("theater")
 			|| queryArr[i].toLowerCase().includes("cinema")) {
 			type = "movie_theater";
+			typeSanitized = "Movie Theaters";
 			break;
 		}
 		else if(queryArr[i].toLowerCase().includes("store")) {
 			type = "store";
+			typeSanitized = "Stores and Markets";
 			break;
 		}
 		/*
@@ -787,14 +801,22 @@ function parseLocationQuery(query) {
 			break;
 		}*/
 	}
-	console.log(type);
+	if(type == "") {
+		for(i = 0 ; i < queryArr.length ; i++) {
+			if(queryArr[i].toLowerCase().includes("me")) {
+				type = queryArr[i+1];
+				typeSanitized = type;
+				break;
+			}		
+		}
+	}
 	locationType = type;
-	console.log(locationType);
+	console.log("Global location : ", locationType);
 	if(queryArr[queryArr.length - 1].toLowerCase().includes("location")
 	|| queryArr[queryArr.length - 1].toLowerCase().includes("me")) {
-        console.log(document.getElementById("map-area"));
-		console.log((document.getElementById("map-area") == null));	
-		geoLocation();	
+	    locationFlag = 1;
+		geoLocation();
+		getLocationResultHeading(typeSanitized, locationFlag, "");
 	}
 	else {
 		for( ; i < queryArr.length - 1;  i++) {
@@ -803,16 +825,14 @@ function parseLocationQuery(query) {
 				break;
 			}
 		}
-		convertAddressToLatLong(address, locationType);
+		convertAddressToLatLong(address, locationType, typeSanitized, locationFlag);
 	}
 
-	// Once the type has been figured out, call geoLocation()
-	// which then calls initMap();
 
 }
 
 
-function convertAddressToLatLong(addr, type) {
+function convertAddressToLatLong(addr, type, typeSanitized, locFlag) {
 	
 	$.ajax({
 		url: "get_lat_long.php",
@@ -824,11 +844,22 @@ function convertAddressToLatLong(addr, type) {
 			console.log("Result:", result);
 			result = result.results[0];
 			var pos = {lat: result.geometry.location.lat, lng: result.geometry.location.lng};
-			// console.log(addr, locationType);
+			getLocationResultHeading(typeSanitized, locFlag, result.formatted_address);
 			initMap(pos);
 		},
 		failure: function(result) {
 			console.log("Failure: ", result);
 		}
 	});	
+}
+
+function getLocationResultHeading(str, flag, addr) {
+	var html = "";
+	if(flag) {
+		html += "Showing " + str + " near your location (5km Radius)";
+	}
+	else {
+		html += "Showing " + str + " near " + addr + " (5km Radius)";
+	}
+	locationHeading = html;
 }
