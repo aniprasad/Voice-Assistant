@@ -654,7 +654,10 @@ function availableCommands() {
 	4. Play Songs
 		4.1 Play song: play <Song name>
 		4.2 Play song with artist: play <Song name> by <Artist>
-		4.3 Build Playlist of Songs: TBI
+		4.3 Get Spotify to suggest playlist of songs?? TBI
+	5. Google Places Integration
+		5.1 Places near my location : Show me {restaurants, stores, cinemas, subway stations, hospitals} near my location
+		5.2 Places near an address : Show me {restaurants, stores, cinemas, subway stations, hospitals} near {address}
 	*/
 }
 
