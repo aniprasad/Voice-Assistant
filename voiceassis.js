@@ -637,37 +637,7 @@ function clearHTML() {
 	}
 }
 
-function availableCommands() {
-	/*
-	1. Weather
-	    1.1 Weather for a city : Weather <City>
-	    1.2 Weather for a country : Weather <Country>
-	    1.3 Weather for a postal code: Weather <Postal Code>
-	2. Soccer 
-		2.1 Soccer table for league: Soccer table/standings <League Code>
-			2.1.1 List of available leagues: league_ids.php
-		2.2 Soccer Fixtures : Soccer Fixtures <Team name>
-		2.3 Soccer Fixtures Upcoming/Previous : soccer fixtures next/previous <num of days to go back or forward> <teamname>
-		2.4 Live Soccer Scores : soccer scores live
-	3. Information
-		3.1 Bring up wikipedia articles based on search : TBI
-	4. Play Songs
-		4.1 Play song: play <Song name>
-		4.2 Play song with artist: play <Song name> by <Artist>
-		4.3 Get Spotify to suggest playlist of songs?? TBI
-	5. Google Places Integration
-		5.1 Places near my location : Show me {restaurants, stores, cinemas, subway stations, hospitals} near my location
-		5.2 Places near an address : Show me {restaurants, stores, cinemas, subway stations, hospitals} near {address}
-	*/
-}
-
 // Google maps stuff
-
-
-
-     // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
 function initMap(pos) {
     
@@ -865,4 +835,28 @@ function getLocationResultHeading(str, flag, addr) {
 		html += "Showing " + str + " near " + addr + " (5km Radius)";
 	}
 	locationHeading = html;
+}
+
+function availableCommands() {
+	/*
+	1. Weather
+	    1.1 Weather for a city : Weather <City>
+	    1.2 Weather for a country : Weather <Country>
+	    1.3 Weather for a postal code: Weather <Postal Code>
+	2. Soccer 
+		2.1 Soccer table for league: Soccer table/standings <League Code>
+			2.1.1 List of available leagues: league_ids.php
+		2.2 Soccer Fixtures : Soccer Fixtures <Team name>
+		2.3 Soccer Fixtures Upcoming/Previous : soccer fixtures next/previous <num of days to go back or forward> <teamname>
+		2.4 Live Soccer Scores : soccer scores live
+	3. Information
+		3.1 Bring up wikipedia articles based on search : TBI
+	4. Play Songs
+		4.1 Play song: play <Song name>
+		4.2 Play song with artist: play <Song name> by <Artist>
+		4.3 Get Spotify to suggest playlist of songs?? TBI
+	5. Google Places Integration
+		5.1 Places near my location : Show me {restaurants, stores, cinemas, subway stations, hospitals} near my location
+		5.2 Places near an address : Show me {restaurants, stores, cinemas, subway stations, hospitals} near {address}
+	*/
 }
