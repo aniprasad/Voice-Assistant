@@ -22,6 +22,9 @@ function setOption(word) {
 	else if(word.includes("show me") || word.includes("location") || word.includes("near me")) {
 		opt = "L";
 	}
+	else if(word.includes("directions from") || word.includes("direction")) {
+		opt = "D";
+	}
 	else {
 		opt = "N";
 	}
@@ -859,4 +862,110 @@ function availableCommands() {
 		5.1 Places near my location : Show me {restaurants, stores, cinemas, subway stations, hospitals} near my location
 		5.2 Places near an address : Show me {restaurants, stores, cinemas, subway stations, hospitals} near {address}
 	*/
+}
+
+
+
+function initDirectionsMap(origin, destination, travelType) {
+  if(document.getElementById("map-area") != null) {
+  	// Element already exists remove it and recreate it
+  	$("#map-area").remove();
+  	$("#about").removeClass("map-section");
+  }
+  var mapDiv = $("<div id='map-area'></div>");
+  $("#about").append(mapDiv);
+
+  // Add CSS classes to the section and mapDiv
+  $("#about").addClass("map-section");
+  $("#map-area").addClass("map-area");
+
+  var directionsService = new google.maps.DirectionsService;
+  var directionsDisplay = new google.maps.DirectionsRenderer;
+  var map = new google.maps.Map(document.getElementById('map-area'), {
+    zoom: 7,
+    center: {lat: 43.653226, lng: -79.3831843}
+  });
+  directionsDisplay.setMap(map);
+
+  calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination, travelType);
+
+}
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay, org, dest, travelType) {
+  directionsService.route({
+    origin: org,
+    destination: dest,
+    travelMode: travelType
+  }, function(response, status) {
+    if (status === 'OK') {
+      directionsDisplay.setDirections(response);
+      console.log(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+
+function parseDirectionQuery(query) {
+	var queryArr=[];
+	queryArr = query.split(" ");
+	var i = 0, j = 0;
+	var travelType = "";
+	var fromAddress = "", toAddress = "";
+	// var fromAddress = query
+	for( ; i < queryArr.length ; i++) {
+		if(queryArr[i].toLowerCase() == "from") {
+			break;
+		}
+	}
+	j = i;
+	for( ; j < queryArr.length ; j++) {
+		if(queryArr[j].toLowerCase() == "to") {
+			break;
+		}
+	}
+	fromAddress = queryArr.slice(i+1,j).join(" ");
+	i = j+1;
+	for( j = j + 1; j < queryArr.length ; j++) {
+		if(queryArr[j].toLowerCase() == "by"
+		   || queryArr[j].toLowerCase().includes("bye")) {
+			break;
+		}
+	}
+	toAddress = queryArr.slice(i,j).join(" ");
+	travelType = queryArr[j+1];
+	if(travelType == ""
+		|| (typeof travelType == undefined)) {
+		travelType = "car";
+	}
+	console.log(travelType);
+	travelType = getTravelTypeOption(travelType);
+	console.log("From Address : " , fromAddress);
+	console.log("To Address : ", toAddress);
+	console.log("Travel Mode : " , travelType);
+	
+	// initDirectionsMap("140 Edmonton Drive, Ontario", "Waterloo, ON", "TRANSIT");
+	initDirectionsMap(fromAddress, toAddress, travelType);
+
+}
+
+function getTravelTypeOption(type) {
+	type = type.toLowerCase();
+	if(type == "driving" || type == "car" || type == "drive") {
+		return "DRIVING";
+	}
+	else if(type == "bus" || type == "subway") {
+		return "TRANSIT";
+	}
+	else if(type == "walk" || type == "walking") {
+		return "WALKING";
+	}
+	else if(type == "cycle" || type == "bicycle"
+		    || type == "cycling") {
+		return "BICYCLING";
+	}
+	else {
+		//Default -> Driving
+		return "DRIVING";
+	}
 }

@@ -220,7 +220,7 @@
                 // Set timeout for 5 seconds now. Change later
                 setTimeout(function () {
                     client.endMicAndRecognition();
-                }, 5000);
+                }, 10000);
             } else {
                 if (luisCfg) {
                     client = Microsoft.CognitiveServices.SpeechRecognition.SpeechRecognitionServiceFactory.createDataClientWithIntent(
@@ -299,6 +299,11 @@
                         console.log("location settings");
                         var locationQuery = sanitizeQuery(response_text);
                         parseLocationQuery(locationQuery);
+                        break;
+                    case "D":
+                        console.log("Direction settings");
+                        var directionQuery = sanitizeQuery(response_text);
+                        parseDirectionQuery(directionQuery);
                         break;
                     default:
                         console.log("Invalid option");
