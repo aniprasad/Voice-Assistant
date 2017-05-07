@@ -7,7 +7,12 @@ var position = {};
 function setOption(word) {
 	var opt = "";
 	console.log(word);
-	if(word.includes("weather")) {
+	// Key Word "search", gets highest preference
+	// over anything
+	if(word.includes("search")) {
+		opt = "S";
+	}
+	else if(word.includes("weather")) {
 		opt = "W";
 	}
 	else if(word.includes("soccer") || word.includes("football")) {
@@ -33,7 +38,79 @@ function setOption(word) {
 
 function sanitizeQuery(query) {
 	query = query.replace(".", "");
+	query = query.replace(":", "");
+	query = query.replace(";", "");
 	return query;
+}
+
+// Google search 
+
+function parseSearchQuery(query) {
+	var queryArr = [];
+	queryArr = query.split(" ");
+	var searchString = "";
+	console.log(queryArr);
+	var header = "Showing Search Query";
+	for(var i = 1 ; i < queryArr.length ; i++) {
+		searchString += queryArr[i] + " ";
+	}
+	// searchString = encodeURI(searchString);
+	console.log(searchString);
+	getGoogleSearchResults(searchString)
+}
+
+function getGoogleSearchResults(searchStr, header) {
+	console.log("Arrives here");
+	var encodedSearchStr = encodeURI(searchStr);
+	// window.open("https://www.w3schools.com");
+	
+	// If popups are not enabled, show the shortened url along
+	// with the query, and ask user to enable it
+$.ajax({
+		url: "shorten_url.php",
+		data: { searchQuery : encodedSearchStr },
+		type: "POST",
+		dataType: "json",
+		success: function(result) {
+			console.log("Result:", result);
+			console.log("Result length", result.results);
+			if(result != "") {
+				$("#results_heading").attr('id', 'gsearch_heading');
+				$(".result_heading").html(header + " (Enable pop-ups to open the tab directly!)");
+				$("#results").attr('id', 'gsearch_results');
+			
+				var searchTable = '<table class="table" id="gsearch_table">';
+
+				searchTable += '<tbody>';
+
+				searchTable += generateGoogleSearchRowsHTML(searchStr, result);
+
+				// End tbody and table
+				searchTable += '</tbody>';
+				searchTable += '</table>';
+
+				$("#gsearch_results").append(searchTable);
+				$("#gsearch_table").addClass("song_table");
+				console.log(searchTable);
+			}
+			else {
+				console.log("Nothing");
+			}
+			
+
+		},
+		failure: function(result) {
+			console.log("Failure: ", result);
+		}
+});
+	// var win = window.open('http://stackoverflow.com/', '_blank');
+	// if (win) {
+	//      //Browser has allowed it to be opened
+	//     win.focus();
+	// } else {
+	//      //Browser has blocked it
+	//      alert('Please allow popups so that the new tab may be opened automatically');
+	// }
 }
 
 // Parse the weather query in order to prepare it for input to API
@@ -135,10 +212,12 @@ function getWeatherInformation(query) {
    
 
 $("#record_button").click(function() {
+	$("#stop-record").addClass("stop-record");
 	clearHTML();
 });
 
 $("#stop-record").click(function() {
+	$("#stop-record").removeClass("stop-record");
 	stopRecording();
 });
 
@@ -585,6 +664,14 @@ function generateSongRowsHTML(spot_link, youtube_link) {
 	html += '<td class="song_row">Youtube Link</td>';
 	html += '<td class="song_row">' + "Youtube link to be added" + '</td>';
 	html += '</tr>';*/
+	return html;
+}
+
+function generateGoogleSearchRowsHTML(query, url) {
+	var html = '<tr>';
+	html += '<td class="search_row">' + '"' + query + '"' + '</td>';
+	html += '<td class="search_row"><a class="gsearch_link" href="'+url+'" target="_blank">' + url + '</a></td>';
+	html += '</tr>';
 	return html;
 }
 

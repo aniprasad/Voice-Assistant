@@ -138,7 +138,7 @@
     <div class="row btn-row">
     <button href="#" class="page-scroll btn btn-xl" id="record_button" onclick="start();clear()"><i class="fa fa-microphone fa-3x"></i></button>  
     </br></br>
-    <button href="#" class="page-scroll btn btn-xl" id="stop-record">Click here to Stop Recording!</button>          
+    <button href="#" class="btn btn-xl" id="stop-record">Click here to Stop Recording!</button>          
     </div>
 
 
@@ -299,9 +299,9 @@
                 }
                 client.startMicAndRecognition();
                 // Set timeout for 5 seconds now. Change later
-                // setTimeout(function () {
-                //     client.endMicAndRecognition();
-                // }, 5000);
+                setTimeout(function () {
+                    client.endMicAndRecognition();
+                }, 7500);
             } else {
                 if (luisCfg) {
                     client = Microsoft.CognitiveServices.SpeechRecognition.SpeechRecognitionServiceFactory.createDataClientWithIntent(
@@ -385,6 +385,12 @@
                         console.log("Direction settings");
                         var directionQuery = sanitizeQuery(response_text);
                         parseDirectionQuery(directionQuery);
+                        break;
+                    case "S": 
+                        console.log("Google search settings");
+                        var searchQuery = sanitizeQuery(response_text);
+                        console.log(response_text);
+                        parseSearchQuery(searchQuery);
                         break;
                     default:
                         console.log("Invalid option");

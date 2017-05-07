@@ -1,4 +1,4 @@
-=/*!
+/*!
  * Start Bootstrap - Agency v3.3.7+1 (http://startbootstrap.com/template-overviews/agency)
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
@@ -198,14 +198,22 @@ fieldset[disabled] .btn-primary.active {
     border: transparent;
     transition: all 1.2s ease;
 }
+.stop-record {
+  transition: none;
+  opacity: 1;
+  background-color: red;
+}
 .btn-xl:hover,
 .btn-xl:focus,
 .btn-xl:active,
 .btn-xl.active,
 .open .dropdown-toggle.btn-xl {
     color: #fff;
-    background-color: #000;
+    /*background-color: #000;*/
     border-color: #f6bf01
+}
+.stop-modal:hover {
+  background-color: red;
 }
 .btn-xl:active,
 .btn-xl.active,

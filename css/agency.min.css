@@ -1098,6 +1098,9 @@ a {
     color: #337ab7;
     text-decoration: none
 }
+.gsearch_link, .gsearch_link:hover, .gsearch_link:active, .gsearch_link.active {
+    color: #fff;
+}
 a:focus,
 a:hover {
     color: #23527c;
@@ -2344,8 +2347,9 @@ table {
 caption {
     padding-top: 8px;
     padding-bottom: 8px;
-    color: #777;
-    text-align: left
+    color: #fff;
+    font-size: 15px;
+    text-align: center
 }
 th {
     text-align: left
