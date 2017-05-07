@@ -760,7 +760,8 @@ function parseLocationQuery(query) {
 			typeSanitized = "Hospitals";
 			break;
 		}
-		else if(queryArr[i].toLowerCase().includes("subway")) {
+		else if(queryArr[i].toLowerCase().includes("subway")
+			|| queryArr[i].toLowerCase().includes("subway station")) {
 			type = "subway_station";
 			typeSanitized = "Subway Stations";
 			break;
@@ -967,7 +968,7 @@ function getTravelTypeOption(type) {
 		return "WALKING";
 	}
 	else if(type == "cycle" || type == "bicycle"
-		    || type == "cycling") {
+		    || type == "cycling" || type == "bike") {
 		return "BICYCLING";
 	}
 	else {

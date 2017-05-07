@@ -1,4 +1,4 @@
-/*!
+=/*!
  * Start Bootstrap - Agency v3.3.7+1 (http://startbootstrap.com/template-overviews/agency)
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
@@ -107,13 +107,13 @@ a.active {
   outline: none;
 }
 a {
-  color: #fed136;
+  /*color: #fed136;*/
 }
 a:hover,
 a:focus,
 a:active,
 a.active {
-  color: #fec503;
+  /*color: #fec503;*/
 }
 h1,
 h2,
@@ -284,6 +284,14 @@ fieldset[disabled] .btn-xl.active {
 .navbar-custom .navbar-nav > .active > a:focus {
   color: white;
   background-color: #fec503;
+}
+
+.recording {
+  background-color: red;
+}
+
+.not-recording {
+  background-color: #000;
 }
 
 #about {
@@ -765,6 +773,11 @@ ul.social-buttons li a:active {
 .btn:active:focus {
   outline: none;
 }
+.custom-modal {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
 .portfolio-modal .modal-dialog {
   margin: 0;
   height: 100%;
