@@ -43,6 +43,17 @@ function sanitizeQuery(query) {
 	return query;
 }
 
+function unspecifiedOption(query) {
+	var queryArr = [];
+	queryArr = query.split(" ");
+	var genericString = "";
+	var header = "Couldn't quite recognize that command. Here's a search link for it.";
+	for(var i = 0 ; i < queryArr.length ; i++) {
+		genericString += queryArr[i] + " ";
+	}
+	getGoogleSearchResults(genericString, header);
+}
+
 // Google search 
 
 function parseSearchQuery(query) {
@@ -56,7 +67,7 @@ function parseSearchQuery(query) {
 	}
 	// searchString = encodeURI(searchString);
 	console.log(searchString);
-	getGoogleSearchResults(searchString)
+	getGoogleSearchResults(searchString, header);
 }
 
 function getGoogleSearchResults(searchStr, header) {
@@ -90,7 +101,7 @@ $.ajax({
 				searchTable += '</table>';
 
 				$("#gsearch_results").append(searchTable);
-				$("#gsearch_table").addClass("song_table");
+				$("#gsearch_table").addClass("gsearch_table");
 				console.log(searchTable);
 			}
 			else {
@@ -705,6 +716,12 @@ function clearHTML() {
 		$(".weather_heading").addClass("result_heading");
 		$(".weather_heading").removeClass("weather_heading");
 		$("#weather_heading").attr("id", "results_heading");
+	}
+	if($("#gsearch_heading").attr("id") == "gsearch_heading") {
+		console.log("Cleared Gsearch");
+		$("#gsearch_table").remove();
+		$(".result_heading").html("");
+		$("#gsearch_heading").attr("id", "results_heading");
 	}
 	if($("#location_heading").attr("id") == "location_heading") {
 		console.log("Cleared Location");

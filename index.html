@@ -393,6 +393,7 @@
                         parseSearchQuery(searchQuery);
                         break;
                     default:
+                        unspecifiedOption(sanitizeQuery(response_text));
                         console.log("Invalid option");
                         break;
                 }

@@ -35,6 +35,10 @@ body {
   margin: 0px auto;
 }
 
+.gsearch_table {
+  table-layout: auto;
+}
+
 .soccer_table {
   table-layout: auto;
   width: 100%;
