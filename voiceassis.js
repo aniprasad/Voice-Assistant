@@ -136,7 +136,11 @@ function getWeatherInformation(query) {
 
 $("#record_button").click(function() {
 	clearHTML();
-})
+});
+
+$("#stop-record").click(function() {
+	stopRecording();
+});
 
 /* Soccer Stuff starts here */
 function parseFootballQuery(query) {
