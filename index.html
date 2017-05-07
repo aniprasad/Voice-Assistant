@@ -58,14 +58,90 @@
 
     <div class="row">
     <div class="col-lg-12 text-center">
-        <h2 class="section-heading">Say Something!</h2>
+        <h2 class="section-heading"><a href="#" data-toggle="modal" data-target="#myModal">Click here to see the list of available commands!</a></h2>
         <!--<h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>-->
     </div>
     </div>
 
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">List of Available Commands</h4>
+            </div>
+            <div class="modal-body custom-modal">
+              <p> Weather - Gets the weather based on the query</p>
+              <ul>
+                <li><p>"Weather { <i>any city name</i> }"</p></li>
+                <li><p>"Weather { <i>any country name</i> }"</p></li>
+                <li><p>"Weather { <i>any postal code</i> }"</p></li>
+              </ul>
+              </p> Soccer/Football Information - Gets relevant soccer information </p>
+              <ul>
+                <li><p>"Soccer/Football standings { <i>League codes </i>}"</p></li>
+                <ul>
+                    <p>List of <i>"League codes"</i></p>
+                    <li><p>"PL" - English Premier League</p></li>
+                    <li><p>"EL1" - English League One</p></li>
+                    <li><p>"FAC" - FA Cup</p></li>
+                    <li><p>"BL1" - Bundesliga</p></li>
+                    <li><p>"FL1" - Ligue 1</p></li>
+                    <li><p>"SA" - Serie A</p></li>
+                    <li><p>"PD" - La Liga</p></li>
+                </ul>
+                <li><p>"Soccer/Football fixtures { <i>Team Name</i> }" - Team name can be replaced by any major soccer club</li>
+                <li><p>"Soccer/Football fixtures next/previous { <i>number</i> } { <i>Team Name</i> }" - Gets upcoming/past "x" fixtures of a particular team</li>
+                <li><p>"Soccer scores live" - Get live scores of teams playing in the major European leagues</p></li>
+              </ul>
+              <p> Playing Songs</p>
+              <ul>
+                <li><p>Play { <i>Song Name</i> } - Provides a spotify link as well for any song</p>
+                <li><p>Play { <i>Song name</i> } by {<i>Artist name </i>}</p></li>
+              </ul>
+              <p> Places of interest</p>
+              <ul>
+                <li><p>Show me { <i>places</i> } near my location</p></li>
+                <li><p>Show me { <i>places</i> } near my { <i>address</i> } - Any complete address eg: 181 Lester St, Waterloo, ON</p></li>
+                <ul>
+                    <p>List of available <i>"places"</i></p>
+                    <li><p>Resturants</p></li>
+                    <li><p>Hospitals</p></li>
+                    <li><p>Stores</p></li>
+                    <li><p>Cinemas</p></li>
+                    <li><p>Subway</p></li>
+                </ul>
+              </ul>
+              <p> Navigation </p>
+              <ul>
+                <li><p>Directions from { <i>From address</i> } to { <i>To address</i> } by { <i>transport modes</i> }</p></li>
+                <ul>
+                    <p> List of <i>"transport modes"</i> available </p>
+                    <li><p>Car/Driving</p></li>
+                    <li><p>Bus</p></li>
+                    <li><p>Walk</p></li>
+                    <li><p>Cycle/Bike</p></li>
+                </ul>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
     <div class="row btn-row">
-    <button href="#" class="page-scroll btn btn-xl" id="record_button" onclick="start();clear()"><i class="fa fa-microphone fa-3x"></i></button>                  
+    <button href="#" class="page-scroll btn btn-xl" id="record_button" onclick="start();clear()"><i class="fa fa-microphone fa-3x"></i></button>  
+    </br></br>
+    <button href="#" class="page-scroll btn btn-xl" id="stop-record">Click here to Stop Recording!</button>          
     </div>
+
+
 
     <!-- <input id="useMic" type="checkbox" align="center">Use Microphone</input> -->
     </div>
@@ -156,6 +232,11 @@
         var client;
         var request;
 
+        /* Stops recording after the stop recording button is pressed. Triggered by event handler in voiceassis.js*/
+        function stopRecording() {
+            client.endMicAndRecognition();
+        }
+
         function useMic() {
             //return document.getElementById("useMic").checked;
             return true;
@@ -218,9 +299,9 @@
                 }
                 client.startMicAndRecognition();
                 // Set timeout for 5 seconds now. Change later
-                setTimeout(function () {
-                    client.endMicAndRecognition();
-                }, 5000);
+                // setTimeout(function () {
+                //     client.endMicAndRecognition();
+                // }, 5000);
             } else {
                 if (luisCfg) {
                     client = Microsoft.CognitiveServices.SpeechRecognition.SpeechRecognitionServiceFactory.createDataClientWithIntent(
