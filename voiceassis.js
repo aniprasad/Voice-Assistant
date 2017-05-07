@@ -437,7 +437,13 @@ function playSong(res) {
 	console.log("Play song function ", res);
 	var playing = false;
 	if(res.length > 0) {
-		res = res[0];
+		for(var i = 0 ; i < res.length ; i++) {
+			if(res[i].preview_url != null) {
+				res = res[i];
+				break;
+			}
+		}
+		// res = res[0];
 
 		$("#results_heading").attr('id', 'songs_heading');
 		$(".result_heading").html("Now Playing - " + res.name + " by " + res.artists[0].name);
