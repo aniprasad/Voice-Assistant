@@ -98,6 +98,8 @@ p.large {
     color: #fff;
     font-family: Quicksand;
     text-align: center;
+    text-transform: capitalize;
+    font-weight: 300;
     /*src: url('/../startbootstrap-agency-1.0.6/lighthouse.ttf');*/
 }
 
