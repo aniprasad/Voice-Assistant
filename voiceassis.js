@@ -2,7 +2,7 @@ var audio = document.createElement("audio");
 var map, infowindow;
 var locationType = "", locationHeading = "";
 var position = {};
-
+var timeout;
 // Set the option based on the key word as given by the input
 function setOption(word) {
 	var opt = "";
@@ -73,11 +73,10 @@ function parseSearchQuery(query) {
 function getGoogleSearchResults(searchStr, header) {
 	console.log("Arrives here");
 	var encodedSearchStr = encodeURI(searchStr);
-	// window.open("https://www.w3schools.com");
-	
 	// If popups are not enabled, show the shortened url along
 	// with the query, and ask user to enable it
-$.ajax({
+
+	$.ajax({
 		url: "shorten_url.php",
 		data: { searchQuery : encodedSearchStr },
 		type: "POST",
@@ -106,22 +105,12 @@ $.ajax({
 			}
 			else {
 				console.log("Nothing");
-			}
-			
-
+			}		
 		},
 		failure: function(result) {
 			console.log("Failure: ", result);
 		}
-});
-	// var win = window.open('http://stackoverflow.com/', '_blank');
-	// if (win) {
-	//      //Browser has allowed it to be opened
-	//     win.focus();
-	// } else {
-	//      //Browser has blocked it
-	//      alert('Please allow popups so that the new tab may be opened automatically');
-	// }
+	});
 }
 
 // Parse the weather query in order to prepare it for input to API
@@ -224,6 +213,7 @@ function getWeatherInformation(query) {
 
 $("#record_button").click(function() {
 	$("#stop-record").addClass("stop-record");
+	$("#record_button").addClass("start-record");
 	clearHTML();
 });
 
@@ -414,9 +404,6 @@ function getTeamInformation(team, filter) {
 	//http://api.football-data.org/v1/teams/5/fixtures?timeFrame=n20
 	$.ajax({
 		url: "teams.json",
-		//data: { input : league.toUpperCase()},
-		//type: "POST",
-		//dataType: "json",
 		success: function(result) {
 			console.log("Result:", result);
 			var totalTeams = result.teams;
@@ -492,7 +479,6 @@ function parseSongQuery(query) {
 	var keyWord = queryArr[0]; // queryArr[0] = "play"
 	var songName = "";
 	var artistName = "";
-	//var artistIndex = 0;
 	for(var i = 0 ; i < queryArr.length ; i++) {
 		if(queryArr[i].toLowerCase() == "by") {
 			songName = queryArr.slice(1, i).join(" ");
@@ -537,7 +523,6 @@ function playSong(res) {
 				break;
 			}
 		}
-		// res = res[0];
 
 		$("#results_heading").attr('id', 'songs_heading');
 		$(".result_heading").html("Now Playing - " + res.name + " by " + res.artists[0].name);
@@ -660,16 +645,11 @@ function generateFixturesHeadingsHTML() {
 	html += '<td class="soccer_row_heading" id="status">Status</td>';
 	return html;
 }
-/*
-function generateSongHeadingHTML() {
-	var html = '<td class="song_heading">Links for the Song</td>';
-	return html;
-}*/
 
 function generateSongRowsHTML(spot_link, youtube_link) {
 	var html = '<tr>';
 	html += '<td class="song_row">Spotify Link</td>';
-	html += '<td class="song_row"><a href="' + spot_link + '">Click to hear the song on Spotify</a></td>';
+	html += '<td class="song_row"><a class="gsearch_link" href="' + spot_link + '">Click to hear the song on Spotify</a></td>';
 	html += '</tr>';
 	/*html += '<tr>';
 	html += '<td class="song_row">Youtube Link</td>';
@@ -722,6 +702,7 @@ function clearHTML() {
 		$("#gsearch_table").remove();
 		$(".result_heading").html("");
 		$("#gsearch_heading").attr("id", "results_heading");
+		$("#gsearch_results").attr("id", "results");
 	}
 	if($("#location_heading").attr("id") == "location_heading") {
 		console.log("Cleared Location");
@@ -836,7 +817,6 @@ function success(pos) {
   console.log(`Latitude : ${crd.latitude}`);
   console.log(`Longitude: ${crd.longitude}`);
   console.log(`More or less ${crd.accuracy} meters.`);
-  // return pos;
   position = {lat: crd.latitude, lng: crd.longitude, accuracy: crd.accuracy};
   console.log(position);
 
@@ -1027,7 +1007,8 @@ function parseDirectionQuery(query) {
 	var i = 0, j = 0;
 	var travelType = "";
 	var fromAddress = "", toAddress = "";
-	// var fromAddress = query
+	// This parsing needs to change
+	// It is okay for now but has to be improved
 	for( ; i < queryArr.length ; i++) {
 		if(queryArr[i].toLowerCase() == "from") {
 			break;

@@ -1099,11 +1099,11 @@ a {
     text-decoration: none
 }
 .gsearch_link, .gsearch_link:hover, .gsearch_link:active, .gsearch_link.active {
-    color: #fff;
+    color: #fff !important;
 }
 a:focus,
 a:hover {
-    color: #23527c;
+    /*color: #23527c;*/
     text-decoration: underline
 }
 a:focus {

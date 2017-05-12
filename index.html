@@ -238,6 +238,7 @@
 
         /* Stops recording after the stop recording button is pressed. Triggered by event handler in voiceassis.js*/
         function stopRecording() {
+            clearTimeout(timeout);
             client.endMicAndRecognition();
         }
 
@@ -303,7 +304,7 @@
                 }
                 client.startMicAndRecognition();
                 // Set timeout for 5 seconds now. Change later
-                setTimeout(function () {
+                timeout = setTimeout(function () {
                     client.endMicAndRecognition();
                 }, 7500);
             } else {
