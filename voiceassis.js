@@ -214,11 +214,16 @@ function getWeatherInformation(query) {
 $("#record_button").click(function() {
 	$("#stop-record").addClass("stop-record");
 	$("#record_button").addClass("start-record");
+	if($("#record_button").is(".start-record")) {
+		$("#record_button").attr("disabled", "disabled");
+	}
 	clearHTML();
 });
 
 $("#stop-record").click(function() {
 	$("#stop-record").removeClass("stop-record");
+	$("#record_button").removeClass("start-record");
+	$("#record_button").removeAttr("disabled");
 	stopRecording();
 });
 

@@ -209,6 +209,11 @@ fieldset[disabled] .btn-primary.active {
   opacity: 1;
   background-color: red;
 }
+.start-record {
+  transition: none;
+  opacity: 1;
+  background-color: green;
+}
 .btn-xl:hover,
 .btn-xl:focus,
 .btn-xl:active,
@@ -241,7 +246,7 @@ fieldset[disabled] .btn-xl:active,
 .btn-xl.disabled.active,
 .btn-xl[disabled].active,
 fieldset[disabled] .btn-xl.active {
-  background-color: #fed136;
+  /*background-color: #fed136;*/
   border-color: #fed136;
 }
 .btn-xl .badge {

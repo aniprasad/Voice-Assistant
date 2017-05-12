@@ -306,6 +306,9 @@
                 // Set timeout for 5 seconds now. Change later
                 timeout = setTimeout(function () {
                     client.endMicAndRecognition();
+                    $("#stop-record").removeClass("stop-record");
+                    $("#record_button").removeClass("start-record");
+                    $("#record_button").removeAttr("disabled");
                 }, 7500);
             } else {
                 if (luisCfg) {
