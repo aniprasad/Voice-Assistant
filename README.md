@@ -7,6 +7,7 @@ For now, the application, can procure the weather information, soccer results, p
 List of Commands:
 
 1) Weather - Gets the weather based on the voice query
+
     "Weather { <i>any city name</i> }"
     "Weather { <i>any country name</i> }"
     "Weather { <i>any postal code</i> }"
@@ -19,13 +20,21 @@ List of Commands:
 2) Soccer/Football Information - Gets relevant soccer information
     
     "Soccer/Football standings { <i>League codes </i>}"
+     
      List of <i>"League codes"</i>
+     
         i) "PL" - English Premier League
+
         ii) "EL1" - English League One
+        
         iii) "FAC" - FA Cup
+        
         iv) "BL1" - Bundesliga
+        
         v) "FL1" - Ligue 1
+        
         vi) "SA" - Serie A
+        
         vii) "PD" - La Liga
    
     "Soccer/Football fixtures { <i> Team Name</i> }" - Team name can be replaced by any major soccer club</li>
