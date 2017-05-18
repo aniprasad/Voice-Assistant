@@ -1,37 +1,109 @@
-# [Start Bootstrap](http://startbootstrap.com/) - [Agency](http://startbootstrap.com/template-overviews/agency/)
+A Simple Voice assistant which converts voice commands to functional calls. 
 
-[Agency](http://startbootstrap.com/template-overviews/agency/) is a one page agency portfolio theme for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/). This theme features several content sections, a responsive portfolio grid with hover effects, full page portfolio item modals, a responsive timeline, and a working PHP contact form.
+This application uses Microsoft's Speech to Text API to parse speech to text. It then uses the parsed text along with a handful of API's to get relevant information.
 
-## Getting Started
+For now, the application, can procure the weather information, soccer results, play songs, show places of interests near locations and provide navigational instructions
 
-Several options are available to get started quickly:
-* [Download the latest release on Start Bootstrap](http://startbootstrap.com/template-overviews/agency/)
-* Clone the repo: `git clone https://github.com/BlackrockDigital/startbootstrap-agency.git`
-* Fork the repo
+List of Commands:
 
-## Developing Using Source Files
+1) Weather - Gets the weather based on the voice query
 
-To use the source files, you will need to have npm installed globally along with Gulp.js. To start:
-* Run `npm install` in the root directory
-* Run `gulp dev` and edit the files as needed
+    "Weather { <i>any city name</i> }"
 
-If you need to update the plugins included with this template, simply run the following tasks:
-* First run `npm update` to update the dependencies
-* Then run `gulp copy` to copy the new versions to their proper destinations
+    "Weather { <i>any country name</i> }"
+    
+    "Weather { <i>any postal code</i> }"
 
-## Bugs and Issues
+    The following gif shows the results for "Weather Toronto" and "Weather Montreal"
 
-Have a bug or an issue with this template? [Open a new issue](https://github.com/BlackrockDigital/startbootstrap-agency/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](http://startbootstrap.com/template-overviews/agency/).
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/weather.gif)
 
-## Creator
 
-Start Bootstrap was created by and is maintained by **[David Miller](http://davidmiller.io/)**, Owner of [Blackrock Digital](http://blackrockdigital.io/).
+2) Soccer/Football Information - Gets relevant soccer information
+    
+    "Soccer/Football standings { <i>League codes </i>}"
+     
+     List of <i>"League codes"</i>
 
-* https://twitter.com/davidmillerskt
-* https://github.com/davidtmiller
+        i) "PL" - English Premier League
 
-Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
+        ii) "EL1" - English League One
+        
+        iii) "FAC" - FA Cup
+        
+        iv) "BL1" - Bundesliga
+        
+        v) "FL1" - Ligue 1
+        
+        vi) "SA" - Serie A
+        
+        vii) "PD" - La Liga
+    
+    The following gif shows the results for "Soccer Standings PL" (Premier league standings) and "Soccer Standings BL" (Soccer Standings BL)
 
-## Copyright and License
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/soccer_standings.gif)
 
-Copyright 2013-2016 Blackrock Digital LLC. Code released under the [MIT](https://github.com/BlackrockDigital/startbootstrap-agency/blob/gh-pages/LICENSE) license.
+    "Soccer/Football fixtures { <i> Team Name</i> }" - Team name can be replaced by any major soccer club
+
+    The following gif shows the results for "Soccer Fixtures Manchester United"
+
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/soccer_fixtures.gif)
+                
+    "Soccer/Football fixtures next/previous { <i>number</i> } { <i>Team Name</i> }" - Gets upcoming/past "x" fixtures of a particular team
+    
+    "Soccer scores live" - Get live scores of teams playing in the major European leagues
+
+    The following gif shows the results for "Live Soccer Scores"
+
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/live_scores.gif)
+     
+3) Playing Songs
+              
+    "Play { <i>Song Name</i> }" - Provides a spotify link as well for any song
+    
+    "Play { <i>Song name</i> } by {<i>Artist name </i>} "
+              
+4) Places of interest
+     
+    "Show me { <i>places</i> } near my location"
+    
+    "Show me { <i>places</i> } near my { <i>address</i> }" - Any complete address eg: 181 Lester St, Waterloo, ON
+
+    List of available <i>"places"</i>
+    
+      i) "Resturants"
+
+      ii) "Hospitals"
+      
+      iii) "Stores"
+      
+      iv) "Cinemas"
+      
+      v) "Subway"
+
+    The following gif shows the results for "Show me restaurants near my location" and "Show me cinemas near my location"
+
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/places_of_interests.gif)
+    
+5) Navigation 
+              
+    "Directions from { <i>From address</i> } to { <i>To address</i> } by { <i>transport modes</i> }"
+    
+    List of "transport modes"</i> available
+                    
+      i) "Car/Driving"
+
+      ii) "Bus"
+      
+      iii) "Walk"
+      
+      iv) "Cycle/Bike"
+
+    The following gif shows the results for "Directions from 181 Lester Street, Waterloo to 140 Edmonton Dr, Toronto by car"
+
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/directions.gif)
+
+6) Generic Search Command
+    
+   "Search { <i> Anything </i> }" - Returns a google search link of any text spoken after "Search"
+
