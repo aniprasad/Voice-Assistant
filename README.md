@@ -71,15 +71,19 @@ List of Commands:
 
     List of available <i>"places"</i>
     
-      i) Resturants
+      i) "Resturants"
 
-      ii) Hospitals
+      ii) "Hospitals"
       
-      iii) Stores
+      iii) "Stores"
       
-      iv) Cinemas
+      iv) "Cinemas"
       
-      v) Subway
+      v) "Subway"
+
+    The following gif shows the results for "Show me restaurants near my location" and "Show me cinemas near my location"
+
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/places_of_interests.gif)
     
 5) Navigation 
               
@@ -87,10 +91,17 @@ List of Commands:
     
     List of "transport modes"</i> available
                     
-      i) Car/Driving
-      ii) Bus
-      iii) Walk
-      iv) Cycle/Bike
+      i) "Car/Driving"
+
+      ii) "Bus"
+      
+      iii) "Walk"
+      
+      iv) "Cycle/Bike"
+
+    The following gif shows the results for "Directions from 181 Lester Street, Waterloo to 140 Edmonton Dr, Toronto by car"
+
+    ![Alt Text](https://github.com/aniprasad/Voice-Assistant/raw/master/gifs/directions.gif)
 
 6) Generic Search Command
     
