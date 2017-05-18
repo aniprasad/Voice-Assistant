@@ -361,7 +361,7 @@ fieldset[disabled] .btn-xl.active {
   }
 }
 header {
-  background-image: url('../img/header-bg.jpg');
+  background-image: url('../img/wallpaper_1.jpg');
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -391,6 +391,13 @@ header .intro-text .intro-heading {
   line-height: 50px;
   margin-bottom: 25px;
 }
+
+header .intro-text .speech-heading {
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 30px;
+}
+
 @media (min-width: 768px) {
   header .intro-text {
     padding-top: 300px;
@@ -411,6 +418,15 @@ header .intro-text .intro-heading {
     line-height: 75px;
     margin-bottom: 50px;
   }
+
+  header .intro-text .speech-heading {
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 30px;
+}
+
+
+
 }
 section {
   padding: 100px 0;

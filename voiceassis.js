@@ -77,7 +77,7 @@ function getGoogleSearchResults(searchStr, header) {
 	// with the query, and ask user to enable it
 
 	$.ajax({
-		url: "shorten_url.php",
+		url: "backend/php/shorten_url.php",
 		data: { searchQuery : encodedSearchStr },
 		type: "POST",
 		dataType: "json",
@@ -160,11 +160,12 @@ function getWeatherInformation(query) {
 
 	//Construct ajax request to weather php endpoint
 	$.ajax({
-		url: "weather.php",
+		url: "backend/php/weather.php",
 		data: { input : input },
 		type: "POST",
 		dataType: "json",
 		success: function(result) {
+			$("#results_heading").get(0).scrollIntoView();
 			console.log("Result:", result);
 
 			if($("#results_heading").attr("id") == "weather_heading") {
@@ -300,9 +301,11 @@ function parseFootballQuery(query) {
 
 function getLiveScores() {
 	$.ajax({
-		url: "get_live_scores.php",
+		url: "backend/php/get_live_scores.php",
 		dataType: "json",
 		success: function(result) {
+
+			$("#results_heading").get(0).scrollIntoView();
 			console.log("Result:", result);
 			console.log(result.games.length);
 			if(result.games.length <= 0) {
@@ -359,11 +362,12 @@ function getStandings(league) {
 	var league = league.toUpperCase();
 	console.log(league);
 	$.ajax({
-		url: "get_standings.php",
+		url: "backend/php/get_standings.php",
 		data: { input : league.toUpperCase()},
 		type: "POST",
 		dataType: "json",
 		success: function(result) {
+			$("#results_heading").get(0).scrollIntoView();
 			console.log("Result:", result);
 
 			$("#results_heading").attr('id', 'soccer_heading');
@@ -434,7 +438,7 @@ function getTeamInformation(team, filter) {
 
 function getTeamFixtures(id, l_id, t_code, t_name, filter) {
 	$.ajax({
-		url: "get_teamfixtures.php",
+		url: "backend/php/get_teamfixtures.php",
 		data: { t_id : id,
 		        t_name: t_name,
 		        l_code: l_id,
@@ -443,6 +447,7 @@ function getTeamFixtures(id, l_id, t_code, t_name, filter) {
 		type: "POST",
 		dataType: "json",
 		success: function(result) {
+			$("#results_heading").get(0).scrollIntoView();
 			console.log("Result:", result);
 
 			$("#results_heading").attr('id', 'soccer_heading');
@@ -502,13 +507,14 @@ function parseSongQuery(query) {
 function getSongSearchResults(song, artist) {
 	console.log(song, artist);
 	$.ajax({
-		url: "get_song_search.php",
+		url: "backend/php/get_song_search.php",
 		data: { song : song,
 				artist: artist},
 		type: "POST",
 		dataType: "json",
 		success: function(result) {
 			console.log("Result:", result);
+			$("#results_heading").get(0).scrollIntoView();
 			playSong(result);
 		},
 		failure: function(result) {
@@ -911,7 +917,7 @@ function parseLocationQuery(query) {
 function convertAddressToLatLong(addr, type, typeSanitized, locFlag) {
 	
 	$.ajax({
-		url: "get_lat_long.php",
+		url: "backend/php/get_lat_long.php",
 		data: { address : addr },
 		type: "POST",
 		dataType: "json",
@@ -921,6 +927,7 @@ function convertAddressToLatLong(addr, type, typeSanitized, locFlag) {
 			result = result.results[0];
 			var pos = {lat: result.geometry.location.lat, lng: result.geometry.location.lng};
 			getLocationResultHeading(typeSanitized, locFlag, result.formatted_address);
+			$("#results_heading").get(0).scrollIntoView();
 			initMap(pos);
 		},
 		failure: function(result) {
